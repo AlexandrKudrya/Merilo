@@ -2,13 +2,10 @@ package main.kotlin.com.merilo.api
 
 import main.kotlin.com.merilo.dto.UpdatePaymentMethodsRequest
 import main.kotlin.com.merilo.dto.UserResponse
-import main.kotlin.com.merilo.model.UserEntity
-import main.kotlin.com.merilo.repository.UserRepository
 import main.kotlin.com.merilo.service.UserService
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.*
 import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.web.bind.annotation.*
 import jakarta.validation.Valid
 
 
