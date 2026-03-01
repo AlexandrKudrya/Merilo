@@ -1,12 +1,12 @@
 services:
   db:
-    image: postgres:16-alpine
+    image: postgres:16
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: splitcheck
+      POSTGRES_DB: merilo
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - merilo_pgdata:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     healthcheck:
@@ -15,24 +15,5 @@ services:
       timeout: 5s
       retries: 5
 
-  backend:
-    build: ./backend
-    env_file: .env
-    ports:
-      - "8000:8000"
-    depends_on:
-      db:
-        condition: service_healthy
-    volumes:
-      - ./backend:/app
-
-  bot:
-    build: ./bot
-    env_file: .env
-    depends_on:
-      - backend
-    volumes:
-      - ./bot:/app
-
 volumes:
-  postgres_data:
+  merilo_pgdata:
