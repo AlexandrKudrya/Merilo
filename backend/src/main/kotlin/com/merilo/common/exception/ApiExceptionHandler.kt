@@ -1,4 +1,4 @@
-package main.kotlin.com.merilo.common.exception
+package com.merilo.common.exception
 
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

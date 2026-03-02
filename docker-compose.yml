@@ -15,5 +15,33 @@ services:
       timeout: 5s
       retries: 5
 
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: merilo-backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      # ===== Spring DB =====
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/merilo
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+
+      # ===== Telegram =====
+      TELEGRAM_BOT_TOKEN: "8340785841:AAHZGvwO5qyt_8iQj_drFyDQEmNSbAafHG4"
+
+      # ===== JWT =====
+      JWT_SECRET: supersecretkey_32chars_minimum!!
+      JWT_EXPIRATION: 1440
+
+      # ===== Optional =====
+      SERVER_PORT: 8080
+
 volumes:
   merilo_pgdata:
