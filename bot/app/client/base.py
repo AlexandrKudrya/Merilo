@@ -16,7 +16,9 @@ class AbstractBackendClient(ABC):
         """POST /orders — create a new order in DRAFT status."""
 
     @abstractmethod
-    async def upload_photo(self, order_id: int, photo: BytesIO, filename: str = "receipt.jpg") -> dict:
+    async def upload_photo(
+        self, order_id: int, photo: BytesIO, filename: str = "receipt.jpg"
+    ) -> dict:
         """POST /orders/{id}/photo — upload receipt photo, triggers Claude parsing."""
 
     @abstractmethod

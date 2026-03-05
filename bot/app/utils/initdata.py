@@ -5,7 +5,9 @@ import time
 import urllib.parse
 
 
-def generate_init_data(bot_token: str, telegram_id: int, username: str | None, first_name: str) -> str:
+def generate_init_data(
+    bot_token: str, telegram_id: int, username: str | None, first_name: str
+) -> str:
     """Generate a valid Telegram initData string signed with bot_token."""
     user: dict = {"id": telegram_id, "first_name": first_name}
     if username:

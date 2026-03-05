@@ -17,7 +17,7 @@ router = Router()
 # Keep strong references to background tasks to prevent GC cancellation
 _background_tasks: set[asyncio.Task] = set()
 
-_POLL_INTERVAL = 3    # seconds between status checks
+_POLL_INTERVAL = 3  # seconds between status checks
 _POLL_MAX_TRIES = 20  # ~60 seconds total
 
 
@@ -183,7 +183,9 @@ async def handle_add(
 
     if not found:
         names = ", ".join(f"@{u}" for u in usernames)
-        await message.answer(f"Никто из {names} ещё не зарегистрирован. Попроси их написать /start боту.")
+        await message.answer(
+            f"Никто из {names} ещё не зарегистрирован. Попроси их написать /start боту."
+        )
         return
 
     found_names = {u["username"] for u in found}

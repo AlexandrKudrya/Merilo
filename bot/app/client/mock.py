@@ -15,6 +15,7 @@ def _log(method: str, path: str, req: object = None, resp: object = None) -> Non
         logger.debug("[MOCK]   req:  %s", json.dumps(req, ensure_ascii=False))
     logger.debug("[MOCK]   resp: %s", json.dumps(resp, ensure_ascii=False))
 
+
 # Sample items from the API docs (prices in kopecks)
 _MOCK_ITEMS = [
     {"id": 1, "name": "Маргарита 30см", "price": 89000, "quantity": 2, "splits": []},
@@ -72,7 +73,9 @@ class MockBackendClient(AbstractBackendClient):
         _log("POST", "/api/v1/orders", resp=order)
         return order
 
-    async def upload_photo(self, order_id: int, photo: BytesIO, filename: str = "receipt.jpg") -> dict:
+    async def upload_photo(
+        self, order_id: int, photo: BytesIO, filename: str = "receipt.jpg"
+    ) -> dict:
         MockBackendClient._photo_upload_times[order_id] = time.monotonic()
         resp = {"message": "parsing started", "order_id": order_id}
         _log("POST", f"/api/v1/orders/{order_id}/photo", req={"filename": filename}, resp=resp)
@@ -80,7 +83,10 @@ class MockBackendClient(AbstractBackendClient):
 
     async def get_order(self, order_id: int) -> dict:
         upload_time = MockBackendClient._photo_upload_times.get(order_id)
-        parsing_done = upload_time is not None and (time.monotonic() - upload_time) >= MockBackendClient._PARSE_DELAY
+        parsing_done = (
+            upload_time is not None
+            and (time.monotonic() - upload_time) >= MockBackendClient._PARSE_DELAY
+        )
 
         if parsing_done:
             resp = {
@@ -132,7 +138,12 @@ class MockBackendClient(AbstractBackendClient):
 
     async def add_participants(self, order_id: int, telegram_ids: list[int]) -> dict:
         resp = {"added": len(telegram_ids)}
-        _log("POST", f"/api/v1/orders/{order_id}/participants", req={"telegram_ids": telegram_ids}, resp=resp)
+        _log(
+            "POST",
+            f"/api/v1/orders/{order_id}/participants",
+            req={"telegram_ids": telegram_ids},
+            resp=resp,
+        )
         return resp
 
     async def get_order_summary(self, order_id: int) -> dict:

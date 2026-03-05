@@ -11,9 +11,7 @@ async def notify_receipt_parsed(bot: Bot, telegram_id: int, order_id: int) -> No
     )
 
 
-async def notify_payment_required(
-    bot: Bot, telegram_id: int, order_id: int, amount: float
-) -> None:
+async def notify_payment_required(bot: Bot, telegram_id: int, order_id: int, amount: float) -> None:
     """Notify participant of the amount they need to pay."""
     await bot.send_message(
         chat_id=telegram_id,

@@ -53,7 +53,9 @@ class BackendClient(AbstractBackendClient):
             response.raise_for_status()
             return response.json()
 
-    async def upload_photo(self, order_id: int, photo: BytesIO, filename: str = "receipt.jpg") -> dict:
+    async def upload_photo(
+        self, order_id: int, photo: BytesIO, filename: str = "receipt.jpg"
+    ) -> dict:
         async with _make_client() as client:
             response = await client.post(
                 f"{settings.backend_url}/api/v1/orders/{order_id}/photo",
