@@ -30,9 +30,7 @@ class Order(Base):
     status: Mapped[str] = mapped_column(Text, default=OrderStatus.DRAFT, nullable=False)
     order_info: Mapped[list] = mapped_column(JSONB, default=list, server_default="[]")
     photo_url: Mapped[str | None] = mapped_column(Text)
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
-    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
@@ -44,9 +42,5 @@ class UserOrder(Base):
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
     user_id: Mapped[int] = mapped_column(BigInteger, ForeignKey("users.id"), nullable=False)
     order_id: Mapped[int] = mapped_column(BigInteger, ForeignKey("orders.id"), nullable=False)
-    status: Mapped[str] = mapped_column(
-        Text, default=ParticipantStatus.PENDING, nullable=False
-    )
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
-    )
+    status: Mapped[str] = mapped_column(Text, default=ParticipantStatus.PENDING, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

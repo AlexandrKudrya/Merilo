@@ -76,6 +76,36 @@ Authorization: Bearer <jwt_token>
 
 ---
 
+### POST /users/lookup
+
+Найти пользователей по списку Telegram username. Возвращает только тех, кто зарегистрирован в системе (хотя бы раз авторизовался).
+
+**Тело запроса:**
+```json
+{
+  "usernames": ["petya", "masha", "unknown"]
+}
+```
+
+> Username передаётся без `@`.
+
+**Ответ 200:**
+```json
+[
+  {"telegram_id": 987654321, "username": "petya"},
+  {"telegram_id": 111222333, "username": "masha"}
+]
+```
+
+> `unknown` отсутствует в ответе — пользователь не найден.
+
+**Ошибки:**
+| Код | Причина |
+|---|---|
+| `422` | Пустой список usernames |
+
+---
+
 ## Заказы
 
 ### POST /orders

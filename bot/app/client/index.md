@@ -6,7 +6,9 @@ HTTP клиент для общения бота с backend API.
 
 | Файл | Описание |
 |---|---|
-| `api.py` | `BackendClient` — методы для вызовов FastAPI: получить заказ, получить summary |
+| `base.py` | `AbstractBackendClient` — ABC с интерфейсом всех методов |
+| `api.py` | `BackendClient` — реальный HTTP клиент (httpx → FastAPI) |
+| `mock.py` | `MockBackendClient` — мок с хардкоженными ответами для локальной разработки |
 
 ## Использование
 

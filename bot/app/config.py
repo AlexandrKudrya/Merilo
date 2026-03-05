@@ -6,6 +6,8 @@ class Settings(BaseSettings):
 
     telegram_bot_token: str
     backend_url: str = "http://backend:8000"
+    mock_backend: bool = True
+    log_level: str = "DEBUG"
 
 
 settings = Settings()  # type: ignore[call-arg]
