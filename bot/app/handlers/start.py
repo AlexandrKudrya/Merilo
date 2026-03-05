@@ -8,7 +8,7 @@ router = Router()
 @router.message(CommandStart())
 async def handle_start(message: Message) -> None:
     await message.answer(
-        "Привет! Я SplitCheck бот.\n\n"
+        "Привет! Я Merilo бот.\n\n"
         "Я помогу разделить счёт с друзьями. "
         "Открой приложение через кнопку ниже или используй команды."
     )

@@ -28,7 +28,7 @@ docker compose up
 
 | Переменная | Описание | Пример |
 |---|---|---|
-| `DATABASE_URL` | Строка подключения к PostgreSQL | `postgresql+asyncpg://postgres:password@db:5432/splitcheck` |
+| `DATABASE_URL` | Строка подключения к PostgreSQL | `postgresql+asyncpg://postgres:password@db:5432/merilo` |
 | `TELEGRAM_BOT_TOKEN` | Токен бота от @BotFather | `1234567890:ABC...` |
 | `SECRET_KEY` | Секрет для подписи JWT (минимум 32 символа) | `supersecretkey_32chars_minimum!!` |
 | `ACCESS_TOKEN_EXPIRE_MINUTES` | Срок жизни JWT | `1440` (24 часа) |
@@ -36,7 +36,7 @@ docker compose up
 | `S3_ENDPOINT_URL` | Endpoint S3-совместимого хранилища | `https://s3.amazonaws.com` |
 | `S3_ACCESS_KEY` | Access key S3 | `AKIA...` |
 | `S3_SECRET_KEY` | Secret key S3 | `wJal...` |
-| `S3_BUCKET_NAME` | Имя бакета | `splitcheck-receipts` |
+| `S3_BUCKET_NAME` | Имя бакета | `merilo-receipts` |
 | `S3_REGION` | Регион | `us-east-1` |
 | `ENVIRONMENT` | Окружение | `development` / `production` |
 | `LOG_LEVEL` | Уровень логов | `INFO` / `DEBUG` |

@@ -1,6 +1,6 @@
 # backend/
 
-FastAPI REST API для SplitCheck.
+FastAPI REST API для Merilo.
 
 ## Что здесь
 

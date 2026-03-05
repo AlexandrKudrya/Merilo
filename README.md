@@ -1,4 +1,4 @@
-# SplitCheck
+# Merilo
 
 Приложение для разделения счёта через Telegram.
 

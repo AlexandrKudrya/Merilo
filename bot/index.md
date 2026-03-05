@@ -1,6 +1,6 @@
 # bot/
 
-aiogram Telegram бот для SplitCheck.
+aiogram Telegram бот для Merilo.
 
 ## Что здесь
 

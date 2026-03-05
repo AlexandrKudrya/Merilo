@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_asyn
 from app.db.base import Base, get_session
 from app.main import app
 
-TEST_DATABASE_URL = "postgresql+asyncpg://postgres:password@localhost:5432/splitcheck_test"
+TEST_DATABASE_URL = "postgresql+asyncpg://postgres:password@localhost:5432/merilo_test"
 
 test_engine = create_async_engine(TEST_DATABASE_URL, echo=False)
 test_session_factory = async_sessionmaker(test_engine, expire_on_commit=False)
