@@ -4,7 +4,7 @@
 
 1. **Не трогай код без задачи** — не рефакторь и не улучшай то, что не входит в текущую задачу. Только то, что явно попросили.
 2. **Всегда пиши тесты** — каждая новая фича или баг-фикс должны покрываться тестами. Нет тестов — нет фичи.
-3. **Миграции через Alembic** — никакого сырого SQL для изменений схемы, только `alembic revision --autogenerate`.
+3. **Миграции через Flyway/Liquibase** — никакого сырого SQL для изменений схемы напрямую.
 
 ## Конвенция index.md
 
@@ -16,14 +16,13 @@
 
 ## Стиль кода
 
-- Линтер + форматтер: `ruff`
-- Type checking: `mypy`
-- Перед коммитом: `cd backend && ruff check . && ruff format --check .`
+- Форматтер: `ktlint` (встроен в Maven-плагин)
+- Перед коммитом: `cd backend && mvn ktlint:check`
 
 ## Тесты
 
-- Тесты в `backend/tests/`
-- Фреймворк: `pytest` + `pytest-asyncio`
+- Тесты в `backend/src/test/kotlin/`
+- Фреймворк: JUnit 5 + MockK
 - Каждый API endpoint должен иметь хотя бы один тест
 - Никакой фичи без тестов
 
@@ -36,9 +35,9 @@
 ## Структура проекта
 
 ```
-Splat/
-├── backend/     # FastAPI REST API — см. backend/index.md
-├── bot/         # aiogram Telegram бот — см. bot/index.md
+Merilo/
+├── backend/     # Spring Boot (Kotlin) REST API — см. backend/index.md
+├── bot/         # Telegram бот — см. bot/index.md
 ├── .env.example # Шаблон переменных окружения
 ├── docker-compose.yml
 └── CLAUDE.md    # Этот файл

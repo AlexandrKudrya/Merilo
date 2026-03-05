@@ -13,18 +13,18 @@
 
 | Слой | Технология |
 |------|-----------|
-| Backend | FastAPI (Python) |
+| Backend | Kotlin, Spring Boot 3, JPA |
 | Telegram Bot | aiogram |
-| База данных | PostgreSQL |
+| База данных | PostgreSQL 16 |
 | AI | Claude API (Anthropic) |
 | Хранилище | S3-compatible |
 
 ## Структура репозитория
 
 ```
-Splat/
-├── backend/           # FastAPI REST API
-├── bot/               # Telegram бот (aiogram)
+Merilo/
+├── backend/           # Spring Boot (Kotlin) REST API
+├── bot/               # Telegram бот
 ├── docker-compose.yml
 └── .env.example
 ```

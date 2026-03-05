@@ -4,7 +4,7 @@
 
 | Файл / папка | Описание |
 |---|---|
-| `backend/` | FastAPI REST API — бизнес-логика, база данных, Claude API интеграция |
+| `backend/` | Spring Boot (Kotlin) REST API — бизнес-логика, база данных, Claude API интеграция |
 | `bot/` | aiogram Telegram бот — уведомления, команды |
 | `.github/workflows/` | GitHub Actions CI/CD пайплайны |
 | `docker-compose.yml` | Локальный запуск всех сервисов (db + backend + bot) |

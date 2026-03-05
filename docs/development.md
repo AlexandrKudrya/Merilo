@@ -3,14 +3,14 @@
 ## Требования
 
 - Docker + Docker Compose
-- Python 3.12+ (для локальной разработки без Docker)
-- uv (менеджер пакетов Python)
+- JDK 21+ (для локальной разработки без Docker)
+- Maven 3.9+
 
 ## Быстрый старт
 
 ```bash
 # 1. Клонировать репозиторий
-git clone <repo_url> && cd Splat
+git clone <repo_url> && cd Merilo
 
 # 2. Создать .env из шаблона и заполнить
 cp .env.example .env
@@ -20,64 +20,35 @@ docker compose up
 ```
 
 После запуска:
-- Backend API: http://localhost:8000
-- Swagger UI: http://localhost:8000/docs
-- ReDoc: http://localhost:8000/redoc
+- Backend API: http://localhost:8080
+- Swagger UI: http://localhost:8080/swagger-ui.html
 
 ## Переменные окружения
 
 | Переменная | Описание | Пример |
 |---|---|---|
-| `DATABASE_URL` | Строка подключения к PostgreSQL | `postgresql+asyncpg://postgres:password@db:5432/splitcheck` |
+| `SPRING_DATASOURCE_URL` | Строка подключения к PostgreSQL | `jdbc:postgresql://db:5432/merilo` |
+| `SPRING_DATASOURCE_USERNAME` | Пользователь БД | `postgres` |
+| `SPRING_DATASOURCE_PASSWORD` | Пароль БД | `password` |
 | `TELEGRAM_BOT_TOKEN` | Токен бота от @BotFather | `1234567890:ABC...` |
-| `SECRET_KEY` | Секрет для подписи JWT (минимум 32 символа) | `supersecretkey_32chars_minimum!!` |
-| `ACCESS_TOKEN_EXPIRE_MINUTES` | Срок жизни JWT | `1440` (24 часа) |
+| `JWT_SECRET` | Секрет для подписи JWT (минимум 32 символа) | `supersecretkey_32chars_minimum!!` |
+| `JWT_EXPIRATION_MINUTES` | Срок жизни JWT | `1440` (24 часа) |
 | `ANTHROPIC_API_KEY` | Ключ Anthropic API | `sk-ant-...` |
 | `S3_ENDPOINT_URL` | Endpoint S3-совместимого хранилища | `https://s3.amazonaws.com` |
 | `S3_ACCESS_KEY` | Access key S3 | `AKIA...` |
 | `S3_SECRET_KEY` | Secret key S3 | `wJal...` |
-| `S3_BUCKET_NAME` | Имя бакета | `splitcheck-receipts` |
-| `S3_REGION` | Регион | `us-east-1` |
-| `ENVIRONMENT` | Окружение | `development` / `production` |
-| `LOG_LEVEL` | Уровень логов | `INFO` / `DEBUG` |
+| `S3_BUCKET_NAME` | Имя бакета | `merilo-receipts` |
 
 ## Локальная разработка (без Docker)
 
 ```bash
 cd backend
 
-# Установить зависимости
-uv sync --dev
+# Собрать проект
+mvn clean package -DskipTests
 
-# Запустить backend (БД должна быть доступна)
-uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-```
-
-```bash
-cd bot
-
-# Установить зависимости
-uv sync
-
-# Запустить бота
-uv run python -m app.main
-```
-
-## Миграции базы данных
-
-Используется Alembic. Никогда не писать SQL напрямую для изменения схемы.
-
-```bash
-cd backend
-
-# Создать новую миграцию (автогенерация из моделей)
-uv run alembic revision --autogenerate -m "add column foo to users"
-
-# Применить миграции
-uv run alembic upgrade head
-
-# Откатить последнюю миграцию
-uv run alembic downgrade -1
+# Запустить (БД должна быть доступна)
+mvn spring-boot:run
 ```
 
 ## Тесты
@@ -86,78 +57,65 @@ uv run alembic downgrade -1
 cd backend
 
 # Запустить все тесты
-uv run pytest
+mvn test
 
-# С подробным выводом
-uv run pytest -v
+# Конкретный класс
+mvn test -Dtest=AuthServiceTest
 
-# Конкретный файл
-uv run pytest tests/test_orders.py
-
-# Конкретный тест
-uv run pytest tests/test_orders.py::test_create_order
+# Конкретный метод
+mvn test -Dtest=AuthServiceTest#"loginOrRegister returns token for existing user"
 ```
 
-Тесты находятся в `backend/tests/`. Каждый новый API эндпоинт обязан иметь хотя бы один тест.
+Тесты находятся в `backend/src/test/kotlin/`. Каждый новый API эндпоинт обязан иметь хотя бы один тест.
+Фреймворк: **JUnit 5 + MockK**.
 
-## Линтер и форматтер
-
-Используется `ruff`. Обязательно перед коммитом:
+## Сборка Docker-образа
 
 ```bash
 cd backend
-
-# Проверить стиль
-uv run ruff check .
-
-# Проверить форматирование
-uv run ruff format --check .
-
-# Автоматически исправить
-uv run ruff check --fix .
-uv run ruff format .
+docker build -t merilo-backend .
 ```
 
-## Type checking
-
-```bash
-cd backend
-uv run mypy .
-```
+Многоступенчатая сборка: Maven на `eclipse-temurin:21` → runtime на `eclipse-temurin:21-jre`.
 
 ## Структура backend
 
 ```
 backend/
-├── app/
-│   ├── api/
-│   │   └── v1/
-│   │       ├── auth.py       # POST /auth/telegram
-│   │       ├── users.py      # GET/PATCH /users/me
-│   │       └── orders.py     # CRUD заказов
-│   ├── core/
-│   │   ├── config.py         # Настройки из .env
-│   │   └── security.py       # JWT токены
-│   ├── db/
-│   │   └── base.py           # SQLAlchemy engine, сессии
-│   ├── models/
-│   │   ├── user.py           # User
-│   │   └── order.py          # Order, UserOrder
-│   ├── schemas/
-│   │   ├── auth.py           # Pydantic-схемы авторизации
-│   │   ├── user.py           # Pydantic-схемы пользователя
-│   │   └── order.py          # Pydantic-схемы заказа
-│   ├── services/
-│   │   ├── auth.py           # Верификация Telegram initData
-│   │   ├── claude.py         # Парсинг чека через Claude API
-│   │   └── s3.py             # Загрузка фото в S3
-│   └── main.py               # Точка входа FastAPI
-├── tests/
-│   ├── conftest.py
-│   ├── test_auth.py
-│   ├── test_users.py
-│   └── test_orders.py
-└── pyproject.toml
+├── src/
+│   ├── main/kotlin/com/merilo/
+│   │   ├── api/
+│   │   │   ├── AuthController.kt       # POST /api/v1/auth/telegram
+│   │   │   └── UserController.kt       # GET/PATCH /api/v1/users/me
+│   │   ├── config/
+│   │   │   ├── JwtService.kt           # Генерация и валидация JWT
+│   │   │   ├── JwtAuthFilter.kt        # Фильтр авторизации
+│   │   │   └── SecurityConfig.kt       # Spring Security конфиг
+│   │   ├── common/exception/
+│   │   │   └── ApiExceptionHandler.kt  # Глобальный обработчик ошибок
+│   │   ├── dto/
+│   │   │   ├── AuthRequest.kt
+│   │   │   ├── AuthResponse.kt
+│   │   │   ├── UserResponse.kt
+│   │   │   └── UpdatePaymentMethodsRequest.kt
+│   │   ├── integration/telegram/
+│   │   │   ├── TelegramInitDataVerifier.kt  # HMAC-SHA256 верификация
+│   │   │   └── TelegramUser.kt
+│   │   ├── model/
+│   │   │   └── UserEntity.kt           # JPA-сущность пользователя
+│   │   ├── repository/
+│   │   │   └── UserRepository.kt       # Spring Data JPA репозиторий
+│   │   ├── service/
+│   │   │   ├── AuthService.kt          # Логика авторизации
+│   │   │   └── UserService.kt          # Логика пользователя
+│   │   └── MeriloApplication.kt        # Точка входа Spring Boot
+│   └── test/kotlin/com/merilo/
+│       ├── integration/telegram/
+│       │   └── TelegramInitDataVerifierTest.kt
+│       └── service/
+│           ├── AuthServiceTest.kt
+│           └── UserServiceTest.kt
+└── pom.xml
 ```
 
 ## Git-конвенции
